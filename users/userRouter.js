@@ -1,5 +1,6 @@
 const express = require('express');
 const user = require("./userDb");
+const posts = require("../posts/postDb")
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.post('/', validateUser(), (req, res) => {
 
 router.post('/:id/posts', validateUserId(), validatePost(), (req, res) => {
 
-  user.insert(req.body)
+  posts.insert({...req.body, user_id:req.params.id })
     .then((post) => {
       res.status(201).json(post)
     })
@@ -142,8 +143,8 @@ function validatePost() {
           message: "Missing user data"
         })
       }
-    }
-    next()    
+    }    
+    next()
   }  
 }
 
